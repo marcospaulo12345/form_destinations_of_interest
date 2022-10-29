@@ -1,3 +1,144 @@
 .App {
+  display: flex;
+  flex-direction: column;
   text-align: center;
+  justify-content: center;
+  background-color: #F0F0F7;
+}
+
+.App header {
+  background-image: url('./assets/images/Sprinkle.svg');
+}
+
+.App header h1 {
+  font: 700 3.2rem Archivo;
+  color: #fff;
+  margin-bottom: 6.4rem;
+  margin-top: 6.4rem;
+}
+
+.App form {
+  width: 70%;
+  max-width: 74rem;
+  border-radius: 0.8rem;
+  border: solid 1px #E6E6F0;
+  margin: -3.2rem auto 3.2rem;
+  padding-top: 6.4rem;
+  /* padding: 6.4rem 6.4rem; */
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.App form fieldset {
+  border: 0;
+  padding: 0 2.4rem;
+}
+
+.input-group-personal {
+  flex-wrap: wrap;
+}
+
+.input-group-destinations {
+  flex-wrap: wrap;
+}
+
+.App form fieldset + fieldset {
+  margin-top: 6.4rem;
+}
+
+.App form fieldset legend {
+  font: 700 1.8rem Archivo;
+  color: #32264D;
+  margin-bottom: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid #E6E6F0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.field + .field {
+  margin-top: 1.4rem;
+}
+
+.field label {
+  font-size: 1.4rem;
+}
+
+.field input {
+  width: 100%;
+  height: 5.6rem;
+  margin-top: 0.8rem;
+  border-radius: 0.8rem;
+  background: #F8F8FC;
+  border: 1px solid #E6E6F0;
+  outline: 0;
+  padding: 4px;
+  font: 1.6rem Archivo;
+}
+
+.App form footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 4rem 2.4rem;
+  background: #FAFAFC;
+  border-top: 1px solid #E6E6F0;
+  margin-top: 6.4rem;
+} 
+
+.App form footer div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  line-height: 2.4rem;
+  color: #9C98A6;
+}
+
+.App form footer div div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.App form footer div div h3 {
+  font: 700 1.8rem Poppins;
+  color: #8257E5;
+}
+
+.App form footer div div p {
+  font: 700 1.2rem Poppins;
+}
+
+.App form footer div img {
+  margin-right: 2rem;
+}
+
+
+.App form footer button {
+  width: 20%;
+  height: 5.6rem;
+  background: #04D361;
+  color: #fff;
+  border: 0;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font: 700 1.6rem Archivo;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  margin-top: 3.2rem;
+}
+
+.App form footer button:hover {
+  background: #04BF58;
 }

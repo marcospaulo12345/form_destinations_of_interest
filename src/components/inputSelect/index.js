@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 
+import close from '../../assets/images/Clear.png'
+
+import './styles.css'
+
 export default function InputSelect({disable, label, listOptions, listSelected, setListSelected}) {
     const [value, setValue] = useState('');
 
     const handleChange = (event) => {
         setValue(event.target.value);
 
-        const teste = listOptions.find(e => e.name_ptbr === event.target.value)
+        const teste = listOptions.find(e => (e?.name_ptbr || e.name) === event.target.value)
 
         if (teste){
-            if(!listSelected.filter(e => e.name_ptbr === event.target.value).length > 0){
+            if(!listSelected.filter(e => (e?.name_ptbr || e.name) === event.target.value).length > 0){
                 setListSelected(listSelected => [...listSelected, teste]);
                 setValue('');
             } else{
@@ -26,13 +30,13 @@ export default function InputSelect({disable, label, listOptions, listSelected, 
     }
 
     return(
-        <div className='field'>
+        <div className='field-select'>
             <label htmlFor='selectOption'>{label}</label>
-            <div>
+            <div className="group-selected">
                 {listSelected.map((value, index) => (
                     <div key={index}>
-                        <span>{value.name_ptbr}</span>
-                        <p onClick={() => ListRemove(index)}>x</p>
+                        <span>{value?.name_ptbr || value.name}</span>
+                        <img src={close} onClick={() => ListRemove(index)} width="22" height="22"/>
                     </div>
                 ))}
                 <input 
@@ -50,7 +54,7 @@ export default function InputSelect({disable, label, listOptions, listSelected, 
                     id={`inputList${label}`}
                 >
                     {listOptions.map((value, index) => (
-                        <option key={index} value={value.name_ptbr}/>
+                        <option key={index} value={value?.name_ptbr || value.name}/>
                     ))}
                 </datalist>
             </div>
