@@ -13,6 +13,7 @@ import './App.css'
 function App() {
   const [listCountries, setListCountries] = useState([]);
   const [listCities, setListCities] = useState([]);
+  const [filteredCityList, setFilteredCityList] = useState([]);
 
   const [listCitiesSelected, setListCitiesSelected] = useState([]);
   const [listCountriesSelected, setListCountriesSelected] = useState([]);
@@ -22,26 +23,29 @@ function App() {
 
     setListCountries(countries.data);
   }
+  
+  let getCities = async () => {
+    const cities = await axios.get('https://amazon-api.sellead.com/city');
+    
+    setListCities(cities.data);
+  }
 
   useEffect(() => {
+      getCities();
       getCountries();
   }, []);
-
-
-  let getCities = async (listCountriesSelected) => {
-    const cities = await axios.get('https://amazon-api.sellead.com/city');
-
-    const myArrayFiltered = cities.data.filter((el) => {
+  
+  function filteredCities(listCountriesSelected) {
+    const myArrayFiltered = listCities.filter((el) => {
       return listCountriesSelected.some((f) => {
         return f.code === el.country_code;
       });
     });
-    
-    setListCities(myArrayFiltered);
+    setFilteredCityList(myArrayFiltered);
   }
 
   useEffect(() => {
-      getCities(listCountriesSelected);
+      filteredCities(listCountriesSelected);
       formik.setFieldValue('listCountriesSelected', listCountriesSelected)
   }, [listCountriesSelected]);
 
@@ -52,18 +56,18 @@ function App() {
   const SignUpSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, "Nome muito curto!")
-      .max(50, "Muito !")
-      .required("Name is required"),
+      .max(50, "Muito Grande!")
+      .required("Esse campo é obrigatório!"),
     phone: Yup.string()
-      .required("Phone number is required"),
-    email: Yup.string().email().required("Email is required"),
+      .required("Esse campo é obrigatório!"),
+    email: Yup.string().email("Email inválido!").required("Esse campo é obrigatório!"),
     cpf: Yup.string()
-        .required('cpf is required'),
+        .required('Esse campo é obrigatório!'),
     listCountriesSelected: Yup.array()
-        .min(1, "At least one option is required")
+        .min(1, "Selecione ao menos um país!")
         .required(),
     listCitiesSelected: Yup.array()
-        .min(1, "At least one option is required")
+        .min(1, "Selecione ao menos uma cidade!")
         .required(),
 
   });
@@ -71,8 +75,11 @@ function App() {
   const formik = useFormik({
     initialValues: {name:'', email: '', phone: '', cpf: '', listCountriesSelected: [], listCitiesSelected: []},
     validationSchema: SignUpSchema,
-    onSubmit: values => {      
-        alert(JSON.stringify(values, null, 2));
+    onSubmit: (values, {resetForm}) => {      
+        alert("Destinos marcados com sucesso!!!");
+        resetForm({values: ''})
+        setListCitiesSelected([])
+        setListCountriesSelected([])
     },
   });
 
@@ -97,10 +104,10 @@ function App() {
                 placeholder="Nome"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.firstName}
+                value={formik.values.name}
               />
-              {formik.errors.name && formik.touched.name && formik.errors.name}
             </div>
+            <span className="error">{formik.errors.name && formik.touched.name && formik.errors.name}</span>
 
             <div className='field'>
               <label htmlFor='email'>Email</label>
@@ -113,8 +120,8 @@ function App() {
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
               />
-              {formik.errors.email && formik.touched.email && formik.errors.email}
             </div>
+            <span className="error">{formik.errors.email && formik.touched.email && formik.errors.email}</span>
 
             <div className='field'>
               <label htmlFor='phone'>Telefone</label>
@@ -125,9 +132,10 @@ function App() {
                 onChange={e => {
                   formik.setFieldValue('phone',e.target.value)
                 }}
+                value={formik.values.phone}
               />
-              {formik.errors.phone && formik.touched.phone && formik.errors.phone}
             </div>
+            <span className="error">{formik.errors.phone && formik.touched.phone && formik.errors.phone}</span>
 
             <div className='field'>
               <label htmlFor='cpf'>CPF</label>
@@ -138,9 +146,10 @@ function App() {
                 onChange={e => {
                   formik.setFieldValue('cpf',e.target.value)
                 }}
+                value={formik.values.cpf}
               />
-              {formik.errors.cpf && formik.touched.cpf && formik.errors.cpf}
             </div>
+            <span className="error">{formik.errors.cpf && formik.touched.cpf && formik.errors.cpf}</span>
 
           </fieldset>
 
@@ -150,10 +159,10 @@ function App() {
             </legend>
 
             <InputSelect label="Países" listOptions={listCountries} listSelected={listCountriesSelected} setListSelected={setListCountriesSelected}/>
-            {formik.errors.listCountriesSelected && formik.touched.listCountriesSelected && formik.errors.listCountriesSelected}
+            <span className="error">{formik.errors.listCountriesSelected && formik.touched.listCountriesSelected && formik.errors.listCountriesSelected}</span>
             
-            <InputSelect disable={listCountriesSelected.length > 0 ? false : true} label="Cidades" listOptions={listCities} listSelected={listCitiesSelected} setListSelected={setListCitiesSelected}/>
-            {formik.errors.listCitiesSelected && formik.touched.listCitiesSelected && formik.errors.listCitiesSelected}
+            <InputSelect disable={listCountriesSelected.length > 0 ? false : true} label="Cidades" listOptions={filteredCityList} listSelected={listCitiesSelected} setListSelected={setListCitiesSelected}/>
+            <span className="error">{formik.errors.listCitiesSelected && formik.touched.listCitiesSelected && formik.errors.listCitiesSelected}</span>
 
           </fieldset>
           <footer className="footer">
